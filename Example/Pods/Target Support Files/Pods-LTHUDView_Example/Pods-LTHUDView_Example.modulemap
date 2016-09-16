@@ -1,0 +1,6 @@
+framework module Pods_LTHUDView_Example {
+  umbrella header "Pods-LTHUDView_Example-umbrella.h"
+
+  export *
+  module * { export * }
+}

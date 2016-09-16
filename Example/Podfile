@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'LTHUDView_Example' do
+  pod 'LTHUDView', :path => '../'
+
+  target 'LTHUDView_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
