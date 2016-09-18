@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LTAnimationView.h"
 
 typedef NS_ENUM(NSInteger, LTHUDType) {
     
@@ -23,7 +24,11 @@ typedef NS_ENUM(NSInteger, LTHUDType) {
 
 @property(nonatomic,strong,readonly) UILabel *messageLabel;
 
+@property(nonatomic,strong) UIColor *foregroundColor;
+@property(nonatomic,strong) UIColor *backgroundColor;
+
 @property (nonatomic,assign) LTHUDType hudType;
+@property (nonatomic,assign) LTLoadingViewType loadingType;
 
 -(instancetype)initWithView:(UIView *)view;
 

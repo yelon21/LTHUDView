@@ -16,7 +16,9 @@ typedef NS_ENUM(NSInteger, LTLoadingViewType) {
 
 @interface LTAnimationView : UIView
 
-@property(nonatomic,assign) LTLoadingViewType type;
+@property(nonatomic,strong) UIColor *foregroundColor;
+
+@property(nonatomic,assign) LTLoadingViewType loadingType;
 
 @property(nonatomic,assign,readonly) BOOL animating;
 

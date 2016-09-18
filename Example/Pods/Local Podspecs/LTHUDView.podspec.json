@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "summary": "A short description of LTHUDView.",
   "description": "TODO: Add long description of the pod here.",
-  "homepage": "https://github.com/<GITHUB_USERNAME>/LTHUDView",
+  "homepage": "https://github.com/yelon21/LTHUDView",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
@@ -12,7 +12,7 @@
     "yelon21": "254956982@qq.com"
   },
   "source": {
-    "git": "https://github.com/<GITHUB_USERNAME>/LTHUDView.git",
+    "git": "https://github.com/yelon21/LTHUDView.git",
     "tag": "0.1.0"
   },
   "platforms": {

@@ -7,7 +7,6 @@
 //
 
 #import "LTHUDView.h"
-#import "LTAnimationView.h"
 
 @interface LTHUDView ()
 
@@ -18,6 +17,7 @@
 @end
 
 @implementation LTHUDView
+@synthesize foregroundColor = _foregroundColor;
 
 -(instancetype)initWithFrame:(CGRect)frame{
     
@@ -49,7 +49,7 @@
     
     [self addSubview:self.contentView];
     
-    self.hudType = -1;
+    _hudType = -1;
     self.alpha = 0.0;
     
     UIView *superV = self;
@@ -71,7 +71,7 @@
         _contentView = [UIView new];
         _contentView.translatesAutoresizingMaskIntoConstraints = NO;
         _contentView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.75];
-        
+        _contentView.userInteractionEnabled = NO;
         _contentView.layer.cornerRadius = 5.0;
         _contentView.layer.masksToBounds = YES;
     }
@@ -94,7 +94,8 @@
     
     if (!_loadingView) {
         _loadingView = [[LTAnimationView alloc]init];
-        _loadingView.type = LTLoadingViewTypeCircleLine;
+        _loadingView.loadingType = LTLoadingViewTypeCircleLine;
+        _loadingView.foregroundColor = self.foregroundColor;
         _loadingView.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:_loadingView];
     }
@@ -108,7 +109,7 @@
         _messageLabel = [UILabel new];
         _messageLabel.numberOfLines = 0;
         _messageLabel.backgroundColor = [UIColor clearColor];
-        _messageLabel.textColor = [UIColor whiteColor];
+        _messageLabel.textColor = self.foregroundColor;
         _messageLabel.font = [UIFont systemFontOfSize:14.0];
         _messageLabel.textAlignment = NSTextAlignmentCenter;
         _messageLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -144,111 +145,145 @@
 }
 
 #pragma mark setter & getter
+-(void)setForegroundColor:(UIColor *)foregroundColor{
+
+    if (_foregroundColor != foregroundColor) {
+        
+        _foregroundColor = foregroundColor;
+        
+        if (self.hudType == LTHUDType_LoadingAndMessage) {
+            
+            self.loadingView.foregroundColor = _foregroundColor;
+        }
+    }
+}
+
+-(UIColor *)foregroundColor{
+    
+    if (!_foregroundColor) {
+        
+        return [UIColor whiteColor];
+    }
+    return _foregroundColor;
+}
+
+-(void)setLoadingType:(LTLoadingViewType)loadingType{
+
+    if (self.hudType == LTHUDType_LoadingAndMessage) {
+        
+        if (self.loadingView.loadingType == loadingType) {
+            
+            return;
+        }
+        self.loadingView.loadingType = loadingType;
+    }
+}
+
+-(LTLoadingViewType)loadingType{
+
+    return self.loadingView.loadingType;
+}
+
 -(void)setHudType:(LTHUDType)hudType{
     
+    if (_hudType == hudType) {
+        
+        return;
+    }
+    
     _hudType = hudType;
+    
+    if (_hudType == LTHUDType_LoadingAndMessage) {
+        
+        [self.loadingView stopAnimation];
+    }
+    
     [self resetContentSubViews];
 }
 
 - (void)resetContentSubViews{
     
-    if (self.contentView) {
-        
-        [self.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-        
-        [self.contentView removeConstraints:self.contentView.constraints];
-        
-        UIView *superView = self.contentView;
-        
-        if (self.hudType == LTHUDType_OnlyMessage) {
-            
-            [superView addSubview:self.messageLabel];
-            
-            [self addEqualConstraintToSuperView:superView
-                                      bySubView:self.messageLabel
-                                     edgeInsets:UIEdgeInsetsMake(10, 10, -10, -10)];
-        }
-        else if (self.hudType == LTHUDType_LoadingAndMessage){
-            
-            [self addEqualConstraintToSuperView:superView
-                                      bySubView:self.loadingView
-                                  withAttribute:NSLayoutAttributeTop
-                                       constant:0.0];
-            [self addEqualConstraintToSuperView:superView
-                                      bySubView:self.loadingView
-                                  withAttribute:NSLayoutAttributeCenterX
-                                       constant:0.0];
-            
-            [superView addConstraint:[NSLayoutConstraint constraintWithItem:self.loadingView
-                                                                  attribute:NSLayoutAttributeLeft
-                                                                  relatedBy:NSLayoutRelationGreaterThanOrEqual
-                                                                     toItem:superView
-                                                                  attribute:NSLayoutAttributeLeft
-                                                                 multiplier:1.0
-                                                                   constant:0.0]];
-            
-            [superView addConstraint:[NSLayoutConstraint constraintWithItem:self.loadingView
-                                                                  attribute:NSLayoutAttributeRight
-                                                                  relatedBy:NSLayoutRelationGreaterThanOrEqual
-                                                                     toItem:superView
-                                                                  attribute:NSLayoutAttributeRight
-                                                                 multiplier:1.0
-                                                                   constant:0.0]];
-            
-            [superView addConstraint:[NSLayoutConstraint constraintWithItem:self.loadingView
-                                                                  attribute:NSLayoutAttributeHeight
-                                                                  relatedBy:NSLayoutRelationEqual
-                                                                     toItem:nil
-                                                                  attribute:NSLayoutAttributeNotAnAttribute
-                                                                 multiplier:1.0
-                                                                   constant:80.0]];
-            [superView addConstraint:[NSLayoutConstraint constraintWithItem:self.loadingView
-                                                                  attribute:NSLayoutAttributeWidth
-                                                                  relatedBy:NSLayoutRelationEqual
-                                                                     toItem:nil
-                                                                  attribute:NSLayoutAttributeNotAnAttribute
-                                                                 multiplier:1.0
-                                                                   constant:80.0]];
-            
-            [superView addConstraint:[NSLayoutConstraint constraintWithItem:self.messageLabel
-                                                                  attribute:NSLayoutAttributeTop
-                                                                  relatedBy:NSLayoutRelationEqual
-                                                                     toItem:self.loadingView
-                                                                  attribute:NSLayoutAttributeBottom
-                                                                 multiplier:1.0
-                                                                   constant:0]];
-            
-            [superView addConstraint:[NSLayoutConstraint constraintWithItem:self.messageLabel
-                                                                  attribute:NSLayoutAttributeCenterX
-                                                                  relatedBy:NSLayoutRelationEqual
-                                                                     toItem:self.loadingView
-                                                                  attribute:NSLayoutAttributeCenterX
-                                                                 multiplier:1.0
-                                                                   constant:0.0]];
-            
-            [superView addConstraint:[NSLayoutConstraint constraintWithItem:self.messageLabel
-                                                                  attribute:NSLayoutAttributeLeft
-                                                                  relatedBy:NSLayoutRelationGreaterThanOrEqual
-                                                                     toItem:superView
-                                                                  attribute:NSLayoutAttributeLeft
-                                                                 multiplier:1.0
-                                                                   constant:5.0]];
-            
-            [superView addConstraint:[NSLayoutConstraint constraintWithItem:self.messageLabel
-                                                                  attribute:NSLayoutAttributeRight
-                                                                  relatedBy:NSLayoutRelationGreaterThanOrEqual
-                                                                     toItem:superView
-                                                                  attribute:NSLayoutAttributeRight
-                                                                 multiplier:1.0
-                                                                   constant:-5.0]];
-            
-            [self addEqualConstraintToSuperView:superView
-                                      bySubView:self.messageLabel
-                                  withAttribute:NSLayoutAttributeBottom
-                                       constant:-5.0];
-        }
-    }
+    [self.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     
+    [self.contentView removeConstraints:self.contentView.constraints];
+    
+    UIView *superView = self.contentView;
+    
+    if (self.hudType == LTHUDType_OnlyMessage) {
+        
+        [superView addSubview:self.messageLabel];
+        
+        [self addEqualConstraintToSuperView:superView
+                                  bySubView:self.messageLabel
+                                 edgeInsets:UIEdgeInsetsMake(10, 10, -10, -10)];
+    }
+    else if (self.hudType == LTHUDType_LoadingAndMessage){
+        
+        [superView addSubview:self.loadingView];
+        [superView addSubview:self.messageLabel];
+        
+        [self addEqualConstraintToSuperView:superView
+                                  bySubView:self.loadingView
+                              withAttribute:NSLayoutAttributeTop
+                                   constant:0.0];
+        [self addEqualConstraintToSuperView:superView
+                                  bySubView:self.loadingView
+                              withAttribute:NSLayoutAttributeCenterX
+                                   constant:0.0];
+        
+        
+        [superView addConstraint:[NSLayoutConstraint constraintWithItem:self.loadingView
+                                                              attribute:NSLayoutAttributeHeight
+                                                              relatedBy:NSLayoutRelationEqual
+                                                                 toItem:nil
+                                                              attribute:NSLayoutAttributeNotAnAttribute
+                                                             multiplier:1.0
+                                                               constant:80.0]];
+        [superView addConstraint:[NSLayoutConstraint constraintWithItem:self.loadingView
+                                                              attribute:NSLayoutAttributeWidth
+                                                              relatedBy:NSLayoutRelationEqual
+                                                                 toItem:nil
+                                                              attribute:NSLayoutAttributeNotAnAttribute
+                                                             multiplier:1.0
+                                                               constant:80.0]];
+        
+        [superView addConstraint:[NSLayoutConstraint constraintWithItem:self.messageLabel
+                                                              attribute:NSLayoutAttributeTop
+                                                              relatedBy:NSLayoutRelationEqual
+                                                                 toItem:self.loadingView
+                                                              attribute:NSLayoutAttributeBottom
+                                                             multiplier:1.0
+                                                               constant:0]];
+        
+        [superView addConstraint:[NSLayoutConstraint constraintWithItem:self.messageLabel
+                                                              attribute:NSLayoutAttributeCenterX
+                                                              relatedBy:NSLayoutRelationEqual
+                                                                 toItem:self.loadingView
+                                                              attribute:NSLayoutAttributeCenterX
+                                                             multiplier:1.0
+                                                               constant:0.0]];
+        
+        [superView addConstraint:[NSLayoutConstraint constraintWithItem:self.messageLabel
+                                                              attribute:NSLayoutAttributeLeft
+                                                              relatedBy:NSLayoutRelationGreaterThanOrEqual
+                                                                 toItem:superView
+                                                              attribute:NSLayoutAttributeLeft
+                                                             multiplier:1.0
+                                                               constant:5.0]];
+        
+        [superView addConstraint:[NSLayoutConstraint constraintWithItem:self.messageLabel
+                                                              attribute:NSLayoutAttributeRight
+                                                              relatedBy:NSLayoutRelationGreaterThanOrEqual
+                                                                 toItem:superView
+                                                              attribute:NSLayoutAttributeRight
+                                                             multiplier:1.0
+                                                               constant:-5.0]];
+        
+        [self addEqualConstraintToSuperView:superView
+                                  bySubView:self.messageLabel
+                              withAttribute:NSLayoutAttributeBottom
+                                   constant:-5.0];
+    }
 }
 
 - (void)addEqualConstraintToSuperView:(UIView *)superView
@@ -311,6 +346,10 @@
     
     // [self.messageLabel sizeToFit];
     
+    if (self.hudType == LTHUDType_LoadingAndMessage) {
+        
+        [self.loadingView startAnimation];
+    }
     
     [UIView animateWithDuration:0.35
                           delay:0.0
@@ -321,10 +360,7 @@
                          self.alpha = 1.0;
                      }
                      completion:^(BOOL finished) {
-                         if (self.hudType == LTHUDType_LoadingAndMessage) {
-                             
-                             [self.loadingView startAnimation];
-                         }
+                         
                      }];
 }
 

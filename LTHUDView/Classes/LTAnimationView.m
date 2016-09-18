@@ -13,10 +13,10 @@
 @property (nonatomic, strong) CAReplicatorLayer *replicatorLayer;
 @property (nonatomic, strong) CALayer *contentLayer;
 @property (nonatomic, strong) CABasicAnimation *animation;
-
 @end
 
 @implementation LTAnimationView
+@synthesize foregroundColor = _foregroundColor;
 
 -(instancetype)initWithFrame:(CGRect)frame{
     
@@ -46,15 +46,6 @@
     
     self.replicatorLayer.frame = CGRectMake(0, 0, radius, radius);
     self.replicatorLayer.position = CGPointMake(width/2.0, height/2.0);
-    
-    if (self.type<0) {
-        
-        self.type = LTLoadingViewTypeCircleLine;
-    }
-    else{
-        
-        self.type = self.type;
-    }
 }
 
 #pragma mark setter & getter
@@ -95,15 +86,18 @@
 - (void)setUp{
     
     self.backgroundColor = [UIColor clearColor];
-    _type = -1;
+    _loadingType = -1;
     
+    if (self.loadingType<0) {
+        
+        self.loadingType = LTLoadingViewTypeCircleLine;
+    }
 }
 
 -(void)setType:(LTLoadingViewType)type{
-    
-    _type = type;
-    
-    switch (self.type) {
+
+    switch (type) {
+        
         case LTLoadingViewTypeCirclePoint:
             
             [self setCirclePoint];
@@ -115,13 +109,13 @@
         default:
             break;
     }
-    [self startAnimation];
 }
 
 - (void)setCirclePoint{
     
     self.contentLayer.frame = CGRectMake(0, 0, 10, 10);
     self.contentLayer.cornerRadius = 5;
+//    self.contentLayer.backgroundColor = self.foregroundColor.CGColor;
     
     CFTimeInterval duration = 1.0;
     
@@ -129,13 +123,14 @@
     self.animation.duration = duration;
     self.animation.repeatCount = MAXFLOAT;
     self.animation.fromValue = [NSValue valueWithCATransform3D:CATransform3DMakeScale(1.0, 1.0, 1.0)];
-    self.animation.toValue = [NSValue valueWithCATransform3D:CATransform3DMakeScale(0.1, 1.0, 1.0)];
+    self.animation.toValue = [NSValue valueWithCATransform3D:CATransform3DMakeScale(0.1, 0.1, 1.0)];
     
     NSUInteger count = 12.0;
     
     CGFloat angle = 2.0 * M_PI / count;
     
     self.replicatorLayer.instanceCount = count;
+    self.replicatorLayer.instanceColor = self.foregroundColor.CGColor;
     self.replicatorLayer.instanceDelay = duration / count;
     self.replicatorLayer.instanceTransform = CATransform3DMakeRotation(angle, 0, 0, 1);
 }
@@ -162,7 +157,7 @@
     self.replicatorLayer.instanceCount = count;
     self.replicatorLayer.instanceDelay = duration / count;
     self.replicatorLayer.instanceTransform = CATransform3DMakeRotation(angle, 0, 0, 1);
-    self.replicatorLayer.instanceColor = [UIColor whiteColor].CGColor;
+    self.replicatorLayer.instanceColor = self.foregroundColor.CGColor;
     self.replicatorLayer.instanceAlphaOffset = -1.0/count/5;
     
 }
@@ -175,8 +170,10 @@
     }
     _animating = YES;
     
-    if (self.type == LTLoadingViewTypeCirclePoint
-        ||self.type == LTLoadingViewTypeCircleLine) {
+    [self setType:self.loadingType];
+    
+    if (self.loadingType == LTLoadingViewTypeCirclePoint
+        ||self.loadingType == LTLoadingViewTypeCircleLine) {
         
         [self.layer addSublayer:self.replicatorLayer];
         [self.replicatorLayer addSublayer:self.contentLayer];
@@ -193,13 +190,31 @@
     
     _animating = NO;
     
-    if (self.type == LTLoadingViewTypeCirclePoint
-        ||self.type == LTLoadingViewTypeCircleLine) {
+    if (self.loadingType == LTLoadingViewTypeCirclePoint
+        ||self.loadingType == LTLoadingViewTypeCircleLine) {
         
         [self.replicatorLayer removeFromSuperlayer];
         [self.contentLayer removeFromSuperlayer];
         [self.contentLayer removeAnimationForKey:@"LT_LAYER_ANIMATION"];
     }
+}
+#pragma mark setter & getter
+
+-(void)setForegroundColor:(UIColor *)foregroundColor{
+
+    if (_foregroundColor != foregroundColor) {
+        
+        _foregroundColor = foregroundColor;
+    }
+}
+
+-(UIColor *)foregroundColor{
+
+    if (!_foregroundColor) {
+        
+        return [UIColor whiteColor];
+    }
+    return _foregroundColor;
 }
 
 @end

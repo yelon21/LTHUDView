@@ -2,7 +2,7 @@
 //  LYAppDelegate.m
 //  LTHUDView
 //
-//  Created by yelon21 on 09/16/2016.
+//  Created by yelon21 on 09/18/2016.
 //  Copyright (c) 2016 yelon21. All rights reserved.
 //
 
