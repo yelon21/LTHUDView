@@ -9,13 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../LTHUDView/Classes/LTAnimationView.m"
-            timestampString = "495874354.962304"
+            filePath = "../LTHUDView/Classes/LTHUDView.m"
+            timestampString = "496065684.097568"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "167"
-            endingLineNumber = "167"
-            landmarkName = "-startAnimation"
+            startingLineNumber = "360"
+            endingLineNumber = "360"
+            landmarkName = "-lt_show:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -26,28 +26,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../LTHUDView/Classes/LTAnimationView.m"
-            timestampString = "495874354.962304"
+            timestampString = "496064031.011491"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "140"
             endingLineNumber = "140"
             landmarkName = "-setCircleLine"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../LTHUDView/Classes/LTAnimationView.m"
-            timestampString = "495874354.962304"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "186"
-            endingLineNumber = "186"
-            landmarkName = "-stopAnimation"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

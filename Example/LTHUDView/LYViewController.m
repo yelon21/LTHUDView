@@ -24,7 +24,7 @@
 
     hudView = [[LTHUDView alloc]initWithView:self.view];
     hudView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
-    hudView.userInteractionEnabled = YES;
+    hudView.userInteractionEnabled = NO;
     [self.view addSubview:hudView];
     
     [hudView addTarget:self action:@selector(hideAction) forControlEvents:UIControlEventTouchUpInside];
@@ -77,10 +77,15 @@
             }
             break;
     }
-    
+
     [hudView lt_show:YES];
-    
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        [hudView lt_hide:YES];
+    });
     i++;
+
 }
 
 @end

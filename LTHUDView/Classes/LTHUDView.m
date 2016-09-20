@@ -8,7 +8,10 @@
 
 #import "LTHUDView.h"
 
-@interface LTHUDView ()
+@interface LTHUDView (){
+
+    NSUInteger showingCount;
+}
 
 @property(nonatomic,strong) UIView *contentView;
 @property(nonatomic,strong) UIView *animationView;
@@ -48,6 +51,8 @@
     self.backgroundColor = [UIColor clearColor];
     
     [self addSubview:self.contentView];
+    
+    showingCount = 0;
     
     _hudType = -1;
     self.alpha = 0.0;
@@ -343,28 +348,50 @@
 
 - (void)lt_show:(BOOL)animated{
     
+    ++showingCount;
     
-    // [self.messageLabel sizeToFit];
+    if (animated) {
+        
+        self.contentView.transform = CGAffineTransformMakeScale(0.1, 0.1);
+    }
     
     if (self.hudType == LTHUDType_LoadingAndMessage) {
         
         [self.loadingView startAnimation];
     }
     
-    [UIView animateWithDuration:0.35
-                          delay:0.0
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                         
-                         self.contentView.transform = CGAffineTransformIdentity;
-                         self.alpha = 1.0;
-                     }
-                     completion:^(BOOL finished) {
-                         
-                     }];
+    if (animated) {
+        
+        [UIView animateWithDuration:0.35
+                              delay:0.0
+                            options:UIViewAnimationOptionCurveEaseInOut
+                         animations:^{
+                             
+                             self.contentView.transform = CGAffineTransformIdentity;
+                             self.alpha = 1.0;
+                         }
+                         completion:^(BOOL finished) {
+                             
+                         }];
+    }
+    else{
+    
+        self.contentView.transform = CGAffineTransformIdentity;
+        self.alpha = 1.0;
+    }
 }
 
 - (void)lt_hide:(BOOL)animated{
+    
+    --showingCount;
+    
+    if (showingCount < 0) {
+        showingCount = 0;
+    }
+    if (showingCount > 0) {
+        
+        return;
+    }
     
     [UIView animateWithDuration:0.35
                           delay:0.0
