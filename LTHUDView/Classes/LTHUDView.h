@@ -24,11 +24,15 @@ typedef NS_ENUM(NSInteger, LTHUDType) {
 
 @property(nonatomic,strong,readonly) UILabel *messageLabel;
 
+@property(nonatomic,assign,readonly) BOOL isShowing;
+
 @property(nonatomic,strong) UIColor *foregroundColor;
 @property(nonatomic,strong) UIColor *backgroundColor;
 
 @property (nonatomic,assign) LTHUDType hudType;
 @property (nonatomic,assign) LTLoadingViewType loadingType;
+
+-(instancetype)init NS_UNAVAILABLE;
 
 -(instancetype)initWithView:(UIView *)view;
 

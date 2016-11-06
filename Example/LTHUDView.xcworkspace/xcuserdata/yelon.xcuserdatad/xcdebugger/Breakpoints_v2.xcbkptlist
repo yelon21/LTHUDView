@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../LTHUDView/Classes/LTHUDView.m"
-            timestampString = "496065684.097568"
+            timestampString = "498559612.142857"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "360"
-            endingLineNumber = "360"
+            startingLineNumber = "368"
+            endingLineNumber = "368"
             landmarkName = "-lt_show:"
             landmarkType = "7">
          </BreakpointContent>

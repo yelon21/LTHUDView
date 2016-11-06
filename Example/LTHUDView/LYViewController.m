@@ -54,7 +54,7 @@
             
         case 2:
             
-            hudView.messageLabel.text = @"iOS是由苹果公司开发的移动操作系统[1]";
+            hudView.messageLabel.text = @"iOS";
             if (hudView.loadingType == LTLoadingViewTypeCircleLine) {
                 
                 hudView.loadingType = LTLoadingViewTypeCirclePoint;

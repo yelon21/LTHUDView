@@ -252,6 +252,14 @@
                                                              multiplier:1.0
                                                                constant:80.0]];
         
+        [superView addConstraint:[NSLayoutConstraint constraintWithItem:self.loadingView
+                                                              attribute:NSLayoutAttributeLeft
+                                                              relatedBy:NSLayoutRelationGreaterThanOrEqual
+                                                                 toItem:superView
+                                                              attribute:NSLayoutAttributeLeft
+                                                             multiplier:1.0
+                                                               constant:10.0]];
+        
         [superView addConstraint:[NSLayoutConstraint constraintWithItem:self.messageLabel
                                                               attribute:NSLayoutAttributeTop
                                                               relatedBy:NSLayoutRelationEqual
@@ -411,4 +419,8 @@
     
 }
 
+-(BOOL)isShowing{
+    
+    return showingCount>0;
+}
 @end
