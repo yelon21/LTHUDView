@@ -10,7 +10,7 @@
 
 @interface LTHUDView (){
 
-    NSUInteger showingCount;
+    NSInteger showingCount;
 }
 
 @property(nonatomic,strong) UIView *contentView;
